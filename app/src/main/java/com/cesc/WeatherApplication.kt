@@ -1,20 +1,17 @@
 package com.cesc
 
 import android.app.Application
-import android.system.Os.bind
 import com.cesc.data.RepositoryImpl
 import com.cesc.data.network.ApiService
 import com.cesc.data.network.createApiService
 import com.cesc.domain.Repository
 import com.cesc.domain.UseCase
-import com.cesc.presentation.MyViewModel
+import com.cesc.presentation.WeatherViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.androidx.compose.get
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.bind
@@ -52,8 +49,8 @@ internal fun createDIModules(): List<Module> {
 
             singleOf(::UseCase)
 
-            // viewModelOf(::MyViewModel)
-            viewModel { MyViewModel(get(named("io")), get()) }
+            viewModel { WeatherViewModel(get(named("io")), get()) }
+
         }
     )
 }

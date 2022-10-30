@@ -10,13 +10,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.cesc.domain.model.WeatherDomainModel
-import com.cesc.presentation.MyViewModel
-import com.cesc.presentation.WeatherIntent
-import com.cesc.presentation.WeatherUiState
+import com.cesc.presentation.*
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -30,18 +29,18 @@ import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun WeatherScreen(viewModel: MyViewModel = koinViewModel()) {
+fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
     LaunchedEffect(key1 = Unit) {
-        viewModel.sendIntent(WeatherIntent.Fetch)
+        viewModel.sendAction(WeatherAction.FetchWeather)
     }
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
-    when (uiState.value) {
-        is WeatherUiState.ShowWeather -> ShowWeather((uiState.value as WeatherUiState.ShowWeather).model)
-        is WeatherUiState.Loading -> Loading()
-        is WeatherUiState.Error -> Error((uiState.value as WeatherUiState.Error).msg)
-        else -> {}
+    when {
+        uiState.isLoading -> LoadingView()
+        uiState.isError -> ErrorView(msg = uiState.errorMessage)
+        uiState.weatherDomainModel != null -> ShowWeather(model = uiState.weatherDomainModel!!)
     }
+
 }
 
 @Composable
@@ -52,23 +51,23 @@ fun ShowWeather(model: WeatherDomainModel) {
             .verticalScroll(rememberScrollState())
     ) {
         Text(text = "${model.status.code}", fontSize = 28.sp, textAlign = TextAlign.Center)
-        Text(text = "${model.cityInfo.city}", fontSize = 28.sp, textAlign = TextAlign.Center)
-        Text(text = "${model.cityInfo.cityCode}", fontSize = 28.sp, textAlign = TextAlign.Center)
-        Text(text = "${model.cityInfo.parent}", fontSize = 28.sp, textAlign = TextAlign.Center)
-        Text(text = "${model.cityInfo.updateTime}", fontSize = 28.sp, textAlign = TextAlign.Center)
+        Text(text = model.cityInfo.city, fontSize = 28.sp, textAlign = TextAlign.Center)
+        Text(text = model.cityInfo.cityCode, fontSize = 28.sp, textAlign = TextAlign.Center)
+        Text(text = model.cityInfo.parent, fontSize = 28.sp, textAlign = TextAlign.Center)
+        Text(text = model.cityInfo.updateTime, fontSize = 28.sp, textAlign = TextAlign.Center)
     }
-    
+
 }
 
 @Composable
-fun Loading() {
+fun LoadingView() {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(text = "Loading...", fontSize = 28.sp, textAlign = TextAlign.Center)
     }
 }
 
 @Composable
-fun Error(msg: String) {
+fun ErrorView(msg: String) {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(text = "Error:${msg}", fontSize = 28.sp, textAlign = TextAlign.Center)
     }

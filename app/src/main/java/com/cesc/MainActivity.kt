@@ -10,7 +10,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.cesc.presentation.compose.CaculatorScreen
 import com.cesc.presentation.compose.WeatherScreen
 import com.cesc.ui.theme.MvisamplecomposeTheme
 
@@ -21,8 +20,8 @@ class MainActivity : ComponentActivity() {
             MvisamplecomposeTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-//                    WeatherScreen()
-                    CaculatorScreen()
+                    WeatherScreen()
+//                    CaculatorScreen()
                 }
             }
         }
