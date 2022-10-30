@@ -2,6 +2,7 @@ package com.cesc
 
 import com.cesc.data.RepositoryImpl
 import com.cesc.data.model.CityInfo
+import com.cesc.data.model.WeatherData
 import com.cesc.data.model.WeatherResponse
 import com.cesc.data.network.ApiService
 import com.cesc.domain.Repository
@@ -73,6 +74,9 @@ class ExampleUnitTest {
             citykey = "101070201",
             parent = "辽宁",
             updateTime = "19:31"
+        ),
+        data = WeatherData(
+            "", 1, 1, "", 10, "", emptyList()
         )
     )
 }

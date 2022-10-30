@@ -1,9 +1,11 @@
 package com.cesc.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cesc.domain.UseCase
 import com.cesc.domain.model.WeatherDomainModel
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -22,23 +24,20 @@ class WeatherViewModel(
         get() = _uiState
 
     init {
-        handleAction()
+        channel.receiveAsFlow()
+            .onEach(::handleAction)
+            .launchIn(viewModelScope)
     }
 
     fun sendAction(action: WeatherAction) {
         channel.trySend(action)
     }
 
-    private fun handleAction() {
-        viewModelScope.launch {
-            channel.consumeAsFlow().collect {
-                when (it) {
-                    is WeatherAction.FetchWeather -> fetchWeather()
-                }
-            }
+    private fun handleAction(action: WeatherAction){
+        when(action){
+            is WeatherAction.FetchWeather -> fetchWeather()
         }
     }
-
 
     private fun fetchWeather() {
         viewModelScope.launch {
@@ -52,6 +51,7 @@ class WeatherViewModel(
             }
 
             fold.onSuccess { model ->
+                Log.e("Model", Gson().toJson(model))
                 updateState {
                     it.copy(isLoading = false, isError = false, weatherDomainModel = model)
                 }
@@ -75,7 +75,7 @@ class WeatherViewModel(
 sealed class WeatherAction {
     object FetchWeather : WeatherAction()
 }
-
+//遵循SSOT原则，所有影响UI刷新的数据都定义在ViewState中
 data class WeatherUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,

@@ -3,6 +3,7 @@ package com.cesc.data.convert
 import com.cesc.data.model.WeatherResponse
 import com.cesc.domain.model.CityInfo
 import com.cesc.domain.model.Status
+import com.cesc.domain.model.Weather
 import com.cesc.domain.model.WeatherDomainModel
 
 /**
@@ -27,6 +28,27 @@ fun WeatherResponse.toDomainModel(): WeatherDomainModel {
             cityCode = this.cityInfo.citykey,
             parent = this.cityInfo.parent,
             updateTime = this.cityInfo.updateTime
-        )
+        ),
+        shidu = this.data.shidu,
+        pm10 = this.data.pm10,
+        pm25 = this.data.pm25,
+        quality = this.data.quality,
+        wendu = this.data.wendu,
+        ganmao = this.data.ganmao,
+        weatherInfos = this.data.forecast.map {
+            Weather(
+                date = it.date,
+                high = it.high,
+                low = it.low,
+                ymd = it.ymd,
+                week = it.week,
+                sunrise = it.sunrise,
+                aqi = it.aqi,
+                fx = it.fx,
+                fl = it.fl,
+                type = it.type,
+                notice = it.notice
+            )
+        }
     )
 }
