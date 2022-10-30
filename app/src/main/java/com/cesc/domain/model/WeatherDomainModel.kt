@@ -21,14 +21,12 @@ data class WeatherDomainModel(
     val weatherInfos: List<Weather>
 )
 
-
 data class CityInfo(
     val city: String,
     val cityCode: String,
     val parent: String,
     val updateTime: String
 )
-
 
 data class Status(
     val code: Int,

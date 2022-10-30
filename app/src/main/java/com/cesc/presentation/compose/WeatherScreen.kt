@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -48,7 +50,6 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
         uiState.isError -> ErrorView(msg = uiState.errorMessage)
         uiState.weatherDomainModel != null -> ShowWeather(model = uiState.weatherDomainModel!!)
     }
-
 }
 
 @Composable
@@ -85,12 +86,11 @@ fun ShowWeather(model: WeatherDomainModel) {
                 thickness = 1.dp
             )
         }
-        
-        item { 
+
+        item {
             WeathersView(weathers = model.weatherInfos)
         }
     }
-
 }
 
 @Composable
@@ -132,31 +132,67 @@ fun WeathersView(weathers: List<Weather>) {
             .wrapContentHeight()
     ) {
         TitleView("15天预报")
-        
-        Spacer(modifier = Modifier
-            .fillMaxWidth()
-            .height(5.dp))
-        
-        LazyRow(modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()) {
-            items(weathers) { item ->
-                SingleDayWeatherView(weather = item)
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(5.dp)
+        )
+
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            itemsIndexed(weathers) { index, item ->
+                val modifier = if (index == weathers.size - 1) Modifier.size(220.dp) else Modifier
+                    .size(220.dp)
+                    .padding(end = 15.dp)
+                SingleDayWeatherView(weather = item, modifier)
             }
         }
     }
 }
 
 @Composable
-fun SingleDayWeatherView(weather: Weather){
+fun SingleDayWeatherView(weather: Weather, modifier: Modifier = Modifier) {
 
-    Card(modifier = Modifier.size(200.dp), elevation = 5.dp, backgroundColor = MaterialTheme.colors.background) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Text(text = "${weather.high} - ${weather.low}")
+    Card(
+        modifier = modifier,
+        elevation = 10.dp,
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = weather.week, modifier = Modifier.padding(top = 5.dp))
+            Text(text = weather.ymd, modifier = Modifier.padding(top = 5.dp))
+            Text(text = "${weather.low} ~ ${weather.high} °C", modifier = Modifier.padding(top = 5.dp))
+            Text(text = weather.type, modifier = Modifier.padding(top = 5.dp))
+            Text(text = "${weather.fx}${weather.fl}", modifier = Modifier.padding(top = 5.dp))
+            Text(text = "日出:${weather.sunrise}", modifier = Modifier.padding(top = 5.dp))
+            Text(text = weather.notice, modifier = Modifier.padding(top = 5.dp))
         }
-
     }
 }
+
+/**
+ *
+{
+"date": "30",
+"high": "高温 15℃",
+"low": "低温 8℃",
+"ymd": "2022-10-30",
+"week": "星期日",
+"sunrise": "06:19",
+"sunset": "16:55",
+"aqi": 39,
+"fx": "南风",
+"fl": "2级",
+"type": "阴",
+"notice": "不要被阴云遮挡住好心情"
+}
+ */
 
 
 @Composable
@@ -169,10 +205,9 @@ fun LoadingView() {
 @Composable
 fun ErrorView(msg: String) {
     Box(modifier = Modifier.fillMaxSize()) {
-        Text(text = "Error:${msg}", fontSize = 28.sp, textAlign = TextAlign.Center)
+        Text(text = "Error:$msg", fontSize = 28.sp, textAlign = TextAlign.Center)
     }
 }
-
 
 @Composable
 internal fun TitleView(text: String) {

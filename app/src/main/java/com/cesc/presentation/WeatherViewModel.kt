@@ -33,8 +33,8 @@ class WeatherViewModel(
         channel.trySend(action)
     }
 
-    private fun handleAction(action: WeatherAction){
-        when(action){
+    private fun handleAction(action: WeatherAction) {
+        when (action) {
             is WeatherAction.FetchWeather -> fetchWeather()
         }
     }
@@ -75,7 +75,7 @@ class WeatherViewModel(
 sealed class WeatherAction {
     object FetchWeather : WeatherAction()
 }
-//遵循SSOT原则，所有影响UI刷新的数据都定义在ViewState中
+// 遵循SSOT原则，所有影响UI刷新的数据都定义在ViewState中
 data class WeatherUiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,

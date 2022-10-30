@@ -50,7 +50,6 @@ internal fun createDIModules(): List<Module> {
             singleOf(::UseCase)
 
             viewModel { WeatherViewModel(get(named("io")), get()) }
-
         }
     )
 }

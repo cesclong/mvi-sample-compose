@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.flow.stateIn
 
-
 @Composable
 fun CaculatorScreen(viewModel: CaculatorViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     val uiState by viewModel.state.collectAsState()
@@ -41,7 +40,6 @@ fun CaculatorScreen(viewModel: CaculatorViewModel = androidx.lifecycle.viewmodel
 
         Text(text = "num:${uiState.counter}")
     }
-
 }
 
 class CaculatorViewModel() : ViewModel() {
@@ -60,7 +58,6 @@ class CaculatorViewModel() : ViewModel() {
             is Event.Decrease -> currentState.copy(counter = currentState.counter - 1)
         }
     }
-
 }
 
 sealed class Event {
