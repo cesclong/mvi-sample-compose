@@ -4,6 +4,11 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cesc.domain.model.CityInfo
 import com.cesc.domain.model.Weather
 import com.cesc.domain.model.WeatherDomainModel
 import com.cesc.presentation.*
@@ -51,84 +57,107 @@ fun ShowWeather(model: WeatherDomainModel) {
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 10.dp)
+            .background(color = MaterialTheme.colors.background)
     ) {
 
-        item {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-            ) {
-                Text(
-                    modifier = Modifier.padding(top = 10.dp),
-                    text = "城市信息",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(top = 5.dp)
-                ) {
-                    Text(text = "省份:", modifier = Modifier.weight(1f), fontSize = 16.sp)
-                    Text(text = model.cityInfo.parent, fontSize = 16.sp)
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(top = 5.dp)
-                ) {
-                    Text(text = "城市:", modifier = Modifier.weight(1f), fontSize = 16.sp, color = Color.Black)
-                    Text(text = model.cityInfo.city, fontSize = 16.sp, color = Color.Black)
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(top = 5.dp)
-                ) {
-                    Text(text = "更新时间:", modifier = Modifier.weight(1f), fontSize = 16.sp, color = Color.Black)
-                    Text(text = model.cityInfo.updateTime, fontSize = 16.sp, color = Color.Black)
-                }
-            }
-        }
+        item { CityInfoView(model.cityInfo) }
 
         item {
-
-            Spacer(
+            Divider(
+                color = Color.Black,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(color = Color.Black)
+                    .padding(top = 10.dp)
+                    .fillMaxWidth(),
+                thickness = 1.dp
             )
         }
 
+        item {
+            TodayWeatherView(model)
+        }
+
+        item {
+            Divider(
+                color = Color.Black,
+                modifier = Modifier
+                    .padding(top = 10.dp)
+                    .fillMaxWidth(),
+                thickness = 1.dp
+            )
+        }
+        
+        item { 
+            WeathersView(weathers = model.weatherInfos)
+        }
     }
 
 }
 
 @Composable
-fun WeatherView(weather: Weather) {
+internal fun CityInfoView(cityInfo: CityInfo) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .wrapContentHeight()
     ) {
-        Text(text = "${weather.low} ~ ${weather.high}")
+        TitleView("城市信息")
+        RowItemView("省份:", cityInfo.parent)
+        RowItemView("城市:", cityInfo.city)
+        RowItemView("更新时间:", cityInfo.updateTime)
     }
+}
 
-    Spacer(
+@Composable
+internal fun TodayWeatherView(model: WeatherDomainModel) {
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(1.dp)
-            .background(color = Color.Black)
-    )
+            .wrapContentHeight()
+    ) {
+        TitleView("今日天气")
+        RowItemView(title = "湿度:", content = model.shidu)
+        RowItemView(title = "PM10:", content = model.pm10.toString())
+        RowItemView(title = "PM25:", content = model.pm25.toString())
+        RowItemView(title = "空气质量:", content = model.quality)
+        RowItemView(title = "温度:", content = model.wendu.toString())
+        RowItemView(title = "感冒提醒:", content = model.ganmao)
+    }
 }
+
+@Composable
+fun WeathersView(weathers: List<Weather>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
+        TitleView("15天预报")
+        
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(5.dp))
+        
+        LazyRow(modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()) {
+            items(weathers) { item ->
+                SingleDayWeatherView(weather = item)
+            }
+        }
+    }
+}
+
+@Composable
+fun SingleDayWeatherView(weather: Weather){
+
+    Card(modifier = Modifier.size(200.dp), elevation = 5.dp, backgroundColor = MaterialTheme.colors.background) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Text(text = "${weather.high} - ${weather.low}")
+        }
+
+    }
+}
+
 
 @Composable
 fun LoadingView() {
@@ -141,5 +170,35 @@ fun LoadingView() {
 fun ErrorView(msg: String) {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(text = "Error:${msg}", fontSize = 28.sp, textAlign = TextAlign.Center)
+    }
+}
+
+
+@Composable
+internal fun TitleView(text: String) {
+    Text(
+        modifier = Modifier.padding(top = 10.dp),
+        text = text,
+        style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
+    )
+}
+
+@Composable
+internal fun RowItemView(title: String, content: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(top = 5.dp)
+    ) {
+        Text(
+            text = title,
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.body1
+        )
+        Text(
+            text = content,
+            style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.primary)
+        )
     }
 }
