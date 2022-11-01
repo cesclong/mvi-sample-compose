@@ -1,4 +1,4 @@
-package com.cesc.data.model
+package com.cesc.weatherfeature.data.model
 
 /**
  * <类说明 必填>

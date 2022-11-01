@@ -1,9 +1,16 @@
 package com.cesc.features
 
+import com.cesc.weatherfeature.setupFeatureWeather
 import com.cn.networkfeature.setupFeatureNetwork
 import org.koin.core.KoinApplication
+import org.koin.core.module.Module
 
 
-fun KoinApplication.loadNetworkModule() {
-    modules(setupFeatureNetwork())
+private fun KoinApplication.setupNetworkModule(): Module {
+    return setupFeatureNetwork()
+}
+
+
+fun KoinApplication.setupFeatureWeatherModule(): Module{
+    return setupFeatureWeather(setupNetworkModule())
 }

@@ -1,16 +1,11 @@
-package com.cesc.presentation.compose
+package com.cesc.weatherfeature.presentation.compose
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,22 +17,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cesc.domain.model.CityInfo
-import com.cesc.domain.model.Weather
-import com.cesc.domain.model.WeatherDomainModel
-import com.cesc.presentation.*
+import com.cesc.weatherfeature.domain.model.CityInfo
+import com.cesc.weatherfeature.domain.model.Weather
+import com.cesc.weatherfeature.domain.model.WeatherDomainModel
+import com.cesc.weatherfeature.presentation.viewModel.WeatherAction
+import com.cesc.weatherfeature.presentation.viewModel.WeatherViewModel
 import org.koin.androidx.compose.koinViewModel
 
 /**
  * <类说明 必填>
  *
- * @author shilong
- * @version [版本号]
- * @see [参考资料]
- * @since [历史 创建日期:2022/10/29]
+ * @author  shilong
+ * @version  [版本号]
+ * @see  [参考资料]
+ * @since  [历史 创建日期:2022/11/1]
  */
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
     LaunchedEffect(key1 = Unit) {
@@ -51,6 +46,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
         uiState.weatherDomainModel != null -> ShowWeather(model = uiState.weatherDomainModel!!)
     }
 }
+
 
 @Composable
 fun ShowWeather(model: WeatherDomainModel) {
@@ -196,14 +192,14 @@ fun SingleDayWeatherView(weather: Weather, modifier: Modifier = Modifier) {
 
 
 @Composable
-fun LoadingView() {
+internal fun LoadingView() {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(text = "Loading...", fontSize = 28.sp, textAlign = TextAlign.Center)
     }
 }
 
 @Composable
-fun ErrorView(msg: String) {
+internal fun ErrorView(msg: String) {
     Box(modifier = Modifier.fillMaxSize()) {
         Text(text = "Error:$msg", fontSize = 28.sp, textAlign = TextAlign.Center)
     }

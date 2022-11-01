@@ -3,9 +3,7 @@ package com.cesc
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -17,13 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.cesc.presentation.compose.WeatherScreen
 import com.cesc.ui.theme.MvisamplecomposeTheme
+import com.cesc.weatherfeature.presentation.compose.WeatherScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,9 +29,7 @@ class MainActivity : ComponentActivity() {
             MvisamplecomposeTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    // WeatherScreen()
-//                    CaculatorScreen()
-                    TestUI()
+                    WeatherScreen()
                 }
             }
         }
@@ -43,9 +38,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TestUI() {
-    Column(modifier = Modifier.fillMaxSize().background(color = Color.Black)) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color.Black)) {
 
-        ProgressBar(modifier = Modifier.fillMaxWidth().height(20.dp),
+        ProgressBar(modifier = Modifier
+            .fillMaxWidth()
+            .height(20.dp),
             progress = 50f,
             color = Color.Red,
             backgroundColor = Color.Black,

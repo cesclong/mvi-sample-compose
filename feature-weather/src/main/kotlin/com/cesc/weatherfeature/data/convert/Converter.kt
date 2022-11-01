@@ -1,10 +1,10 @@
-package com.cesc.data.convert
+package com.cesc.weatherfeature.data.convert
 
-import com.cesc.data.model.WeatherResponse
-import com.cesc.domain.model.CityInfo
-import com.cesc.domain.model.Status
-import com.cesc.domain.model.Weather
-import com.cesc.domain.model.WeatherDomainModel
+import com.cesc.weatherfeature.data.model.WeatherResponse
+import com.cesc.weatherfeature.domain.model.CityInfo
+import com.cesc.weatherfeature.domain.model.Status
+import com.cesc.weatherfeature.domain.model.Weather
+import com.cesc.weatherfeature.domain.model.WeatherDomainModel
 
 /**
  * <类说明 必填>

@@ -1,4 +1,4 @@
-package com.cesc.domain.model
+package com.cesc.weatherfeature.domain.model
 
 /**
  * <类说明 必填>
