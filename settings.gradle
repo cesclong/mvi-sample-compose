@@ -16,3 +16,4 @@ rootProject.name = "mvi-sample-compose"
 include ':app'
 include ':network-feature'
 include ':feature-weather'
+include ':feature-search-city'
