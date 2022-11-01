@@ -6,6 +6,7 @@ import com.cesc.data.network.ApiService
 import com.cesc.data.network.createApiService
 import com.cesc.domain.Repository
 import com.cesc.domain.UseCase
+import com.cesc.features.loadNetworkModule
 import com.cesc.presentation.WeatherViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +36,7 @@ class WeatherApplication : Application() {
             androidContext(this@WeatherApplication)
             androidLogger()
             modules(createDIModules())
+            loadNetworkModule()
         }
     }
 }

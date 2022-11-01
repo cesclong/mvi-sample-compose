@@ -14,3 +14,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "mvi-sample-compose"
 include ':app'
+include ':network-feature'
+include ':feature-weather'
