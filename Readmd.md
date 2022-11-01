@@ -10,4 +10,8 @@ http://t.weather.itboy.net/api/weather/city/101070201
 https://github.com/baichengzhou/weather.api/blob/master/src/main/resources/citycode-2019-08-23.json
 
 
+# Koin
+https://insert-koin.io/docs/reference/koin-android/modules-android
+https://insert-koin.io/docs/reference/koin-android/compose
+
 
