@@ -1,0 +1,64 @@
+apply plugin: "org.jetbrains.kotlin.android"
+
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 32
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1,LICENSE.md,LICENSE-notice.md}'
+        }
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+}
+
+dependencies {
+    def koin_version = "3.2.2"
+    def koin_android_compose_version = "3.3.0"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_android_compose_version"
+
+
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
+    def retrofit = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+
+    def mockkVersion = "1.13.2"
+    testImplementation "io.mockk:mockk-android:${mockkVersion}"
+    testImplementation "io.mockk:mockk-agent:${mockkVersion}"
+    androidTestImplementation "io.mockk:mockk-android:${mockkVersion}"
+    androidTestImplementation "io.mockk:mockk-agent:${mockkVersion}"
+
+    testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
+}
