@@ -25,6 +25,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cesc.ui.theme.AppTheme
+import com.cn.featurewanandroidhome.presentation.composable.HomeScreen
+import com.cn.featurewanandroidhome.presentation.graph.createHomeNavGraph
 
 class WanAndroidBottomNavigationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,11 +96,12 @@ internal fun BottomNavigationActivityContent() {
                 startDestination = BottomNavItem.Home.route
             ) {
 
+                createHomeNavGraph(navController)
+
                 composable(BottomNavItem.Home.route) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        Text(text = "home")
-                    }
+                    HomeScreen(navController)
                 }
+
                 composable(BottomNavItem.Profile.route) {
                     Column(modifier = Modifier.fillMaxSize()) {
                         Text(text = "profile")

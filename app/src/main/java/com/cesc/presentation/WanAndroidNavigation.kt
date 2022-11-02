@@ -8,7 +8,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 
 
-sealed class BottomNavItem(val route: String, val icon: ImageVector, val name : String) {
+sealed class BottomNavItem(val route: String, val icon: ImageVector, val name: String) {
     object Home : BottomNavItem("bottom_home", Icons.Default.Home, "Home")
 
     object Category : BottomNavItem("bottom_category", Icons.Default.Menu, "Category")
