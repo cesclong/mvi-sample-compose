@@ -21,7 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cesc.ui.theme.MvisamplecomposeTheme
+import com.cesc.ui.theme.AppTheme
 import com.cesc.weatherfeature.presentation.compose.WeatherScreen
 import com.cn.featuresearchcity.presentation.compose.SearchCityScreen
 
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            MvisamplecomposeTheme {
+            AppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     AppNavHost(navController = navController)
@@ -151,12 +151,4 @@ fun ProgressBar(
 @Composable
 fun Greeting(name: String) {
     Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MvisamplecomposeTheme {
-        Greeting("Android")
-    }
 }

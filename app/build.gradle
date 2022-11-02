@@ -79,6 +79,11 @@ dependencies {
     def nav_version = "2.5.2"
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
+    def accompanistVersion = "0.18.0"
+
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion"
+    implementation "com.google.accompanist:accompanist-insets:$accompanistVersion"
+
     // Koin for JUnit 4
     testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
     testImplementation 'junit:junit:4.13.2'
