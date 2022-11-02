@@ -73,6 +73,7 @@ dependencies {
     implementation project(':network-feature')
     implementation project(':feature-weather')
     implementation project(':feature-search-city')
+    implementation project(':feature-wan-android-home')
 
 
     def nav_version = "2.5.2"

@@ -4,7 +4,7 @@ apply from: "$rootDir/build-support/shared-android-kotlin.gradle"
 
 
 android {
-    namespace 'com.cesc.featuresearchcity'
+    namespace 'com.cesc.featurewanandroidhome'
 }
 
 dependencies {
