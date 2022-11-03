@@ -2,14 +2,22 @@ package com.cn.featurewanandroidhome.data.model
 
 import com.cesc.commonmodel.Article
 import com.cesc.commonmodel.IDataResponse
+import com.google.gson.annotations.SerializedName
 
 
 data class SquareDataResponse(
-    override val curPage: Int,
-    override val offset: Int,
-    override val over: Boolean,
-    override val pageCount: Int,
-    override val size: Int,
-    override val total: Int,
+    @SerializedName("errorCode") val code: Int,
+    @SerializedName("errorMsg") val message: String,
+    val data: SquareData
+)
+
+data class SquareData(
+    val curPage: Int,
+    val offset: Int,
+    val over: Boolean,
+    val pageCount: Int,
+    val size: Int,
+    val total: Int,
     val datas: List<Article>
-) : IDataResponse
+)
+

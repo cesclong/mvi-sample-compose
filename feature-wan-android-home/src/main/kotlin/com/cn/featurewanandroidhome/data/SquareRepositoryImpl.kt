@@ -14,6 +14,6 @@ class SquareRepositoryImpl(
     }
 
     override suspend fun getArticles(index: Int): SquareModel {
-        return apiService.getSquareArticles(index).data.toDomainModel()
+        return apiService.getSquareArticles(index).toDomainModel()
     }
 }

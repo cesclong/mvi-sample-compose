@@ -6,6 +6,6 @@ import com.cn.featurewanandroidhome.domain.model.SquareModel
 
 fun SquareDataResponse.toDomainModel() =
     SquareModel(
-        articles = this.datas
+        articles = this.data.datas
     )
 
