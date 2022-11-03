@@ -6,10 +6,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-internal fun SquareScreen(navController: NavController) {
+internal fun SquareScreen(navController: NavController, viewModel : SquareViewModel = koinViewModel()) {
     Column(modifier = Modifier.fillMaxSize()) {
        Text(text = "square") 
     }

@@ -25,4 +25,4 @@ internal fun createWanAndroidRetrofit() = Retrofit.Builder().apply {
     client(createOkhttpClient())
     baseUrl("https://www.wanandroid.com")
     addConverterFactory(GsonConverterFactory.create(createGson()))
-}
+}.build()

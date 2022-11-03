@@ -4,5 +4,5 @@ import com.cesc.commonmodel.Article
 
 
 data class SquareModel(
-    val list: List<Article> = emptyList()
+    val articles: List<Article> = emptyList()
 )

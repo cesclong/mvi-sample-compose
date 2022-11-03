@@ -10,7 +10,7 @@ fun setupFeatureNetwork() = module {
 }
 
 internal val networkManagerModule = module {
-    single { createRetrofit() }
-//    single { createWanAndroidRetrofit() }
+//    single { createRetrofit() }
+    single { createWanAndroidRetrofit() }
 }
 

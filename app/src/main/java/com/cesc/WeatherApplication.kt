@@ -4,10 +4,10 @@ import android.app.Application
 import android.content.Context
 import com.cesc.features.setupFeatureSearchCityModule
 import com.cesc.features.setupFeatureWeatherModule
+import com.cesc.features.setupWanAndroidHomeFeatureModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import org.koin.core.module.Module
 
 /**
  * <类说明 必填>
@@ -32,7 +32,8 @@ class WeatherApplication : Application() {
 
             val moduleList = listOf(
                 setupFeatureWeatherModule(),
-                setupFeatureSearchCityModule()
+                setupFeatureSearchCityModule(),
+                setupWanAndroidHomeFeatureModule()
             )
             modules(moduleList)
         }
