@@ -21,3 +21,9 @@ data class SquareData(
     val datas: List<Article>
 )
 
+
+data class TrendDataResponse(
+    @SerializedName("errorCode") val code: Int,
+    @SerializedName("errorMsg") val message: String,
+    val data : List<Article>
+)

@@ -8,9 +8,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.reduce
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -21,8 +23,7 @@ class SquareViewModel(
 
     private val _uiState = MutableStateFlow(SquareUiState())
 
-    val uiState: StateFlow<SquareUiState>
-        get() = _uiState
+    val uiState = _uiState.asStateFlow()
 
     init {
         channel.receiveAsFlow()
@@ -44,8 +45,8 @@ class SquareViewModel(
     }
 
     private fun fetchSquareData(page: Int) {
-        updateState {
-            it.copy(isLoading = true)
+        reduceState {
+            this.copy(isLoading = true, isError = false, datas = emptyList())
         }
         viewModelScope.launch {
             val respond = withContext(Dispatchers.IO) {
@@ -55,23 +56,20 @@ class SquareViewModel(
             }
             respond.fold(
                 onSuccess = { model ->
-                    updateState {
-                        it.copy(isLoading = false, isError = false, datas = model.articles)
+                    reduceState {
+                        this.copy(isLoading = false, isError = false, datas = model.articles)
                     }
                 },
                 onFailure = {
-                    updateState {
-                        it.copy(isLoading = false, isError = true)
-                    }
-
+                    reduceState { this.copy(isLoading = false, isError = true) }
                 }
             )
 
         }
     }
 
-    private fun updateState(handler: (SquareUiState) -> SquareUiState) {
-        _uiState.tryEmit(handler(_uiState.value))
+    private fun reduceState(reducer: SquareUiState.() -> SquareUiState) {
+        _uiState.value = _uiState.value.reducer()
     }
 }
 

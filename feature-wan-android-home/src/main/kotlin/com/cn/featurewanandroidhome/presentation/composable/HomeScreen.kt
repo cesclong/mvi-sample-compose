@@ -6,7 +6,6 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -49,7 +48,7 @@ fun HomeScreen(navController: NavController, homeViewModel: HomeScreenViewModel 
         ) { page ->
             when (page) {
                 0 -> SquareScreen(navController = navController)
-                1 -> RecommendScreen(navController = navController)
+                1 -> TrendScreen(navController = navController)
                 2 -> QuestionScreen(navController = navController)
             }
 

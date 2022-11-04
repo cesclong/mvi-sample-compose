@@ -1,9 +1,8 @@
 package com.cn.featurewanandroidhome.presentation.composable
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,82 +21,90 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import com.cesc.commonmodel.Article
-import org.jetbrains.annotations.NotNull
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-internal fun SquareScreen(
+internal fun TrendScreen(
     navController: NavController,
-    viewModel: SquareViewModel = koinViewModel()
+    viewModel: TrendViewModel = koinViewModel()
 ) {
-
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
-    DisposableEffect(key1 = Unit) {
-        viewModel.sendIntent(SquareIntent.Fetch(0))
-        onDispose { }
-    }
-
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        SquareView(articles = uiState.datas)
-
-        if (uiState.isLoading) LoadView()
-
-        if (uiState.isError) ErrorView()
-    }
-
-}
-
-@Composable
-internal fun LoadView() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        CircularProgressIndicator(
-            modifier = Modifier.align(Alignment.Center)
-        )
-    }
-
-}
-
-@Composable
-internal fun ErrorView(msg: String = "error") {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = msg,
-            modifier = Modifier.align(Alignment.Center)
-        )
-    }
-
-}
-
-@Composable
-internal fun SquareView(articles: List<Article>) {
-    LazyColumn {
-
-        items(articles) {
-            SquareItemView(article = it)
+    LaunchedEffect(key1 = Unit) {
+        viewModel.event.collectLatest {
+            when (it) {
+                is TrendEvent.ShowToast -> trendShowToast(context, it.msg)
+            }
         }
     }
 
+    //生命周期state
+    val lifecycleEventState by LocalLifecycleOwner.current.lifecycle.observeAsState()
+
+    if (lifecycleEventState == Lifecycle.Event.ON_RESUME){
+        Log.e("Trend", "Resume")
+    }
+
+    DisposableEffect(key1 = "Init") {
+        viewModel.sendIntent(TrendIntent.Init)
+        onDispose { }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (uiState.data.isNotEmpty()) {
+            LazyColumn {
+                items(uiState.data) {
+                    TrendItemView(it)
+                }
+            }
+        }
+
+        if (uiState.isLoading) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator()
+                    Text(text = "Loading....")
+                }
+            }
+        }
+
+        if (uiState.isError) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(text = uiState.errorMessage)
+            }
+        }
+
+
+    }
 }
 
+
 @Composable
-internal fun SquareItemView(article: Article) {
+internal fun TrendItemView(article: Article) {
 
     Card(
         modifier = Modifier
@@ -147,33 +154,21 @@ internal fun SquareItemView(article: Article) {
     }
 }
 
+private fun trendShowToast(context: Context, msg: String) {
+    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+}
 
 @Composable
-internal fun LabelTextButton(
-    text: String,
-    modifier: Modifier = Modifier,
-    cornerValue: Dp = 25.dp / 2,
-    onClick: (() -> Unit)? = null
-) {
-    Text(
-        text = text,
-        modifier = modifier
-            .height(25.dp)
-            .clip(shape = RoundedCornerShape(cornerValue))
-            .background(
-                color = Color(0XFF3489FF)
-            )
-            .padding(
-                horizontal = 10.dp,
-                vertical = 3.dp
-            )
-            .clickable {
-                onClick?.invoke()
-            },
-        fontSize = 13.sp,
-        textAlign = TextAlign.Center,
-        color = Color.White,
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 1
-    )
+internal fun Lifecycle.observeAsState(): State<Lifecycle.Event> {
+    val state = remember { mutableStateOf(Lifecycle.Event.ON_ANY) }
+    DisposableEffect(this) {
+        val observer = LifecycleEventObserver { _, event ->
+            state.value = event
+        }
+        this@observeAsState.addObserver(observer)
+        onDispose {
+            this@observeAsState.removeObserver(observer)
+        }
+    }
+    return state
 }
