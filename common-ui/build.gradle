@@ -1,20 +1,11 @@
-
 apply plugin: "com.android.library"
 apply from: "$rootDir/build-support/shared-android-kotlin.gradle"
 
-
 android {
-    namespace 'com.cesc.featurewanandroidhome'
+    namespace 'com.cesc.commonui'
 }
 
 dependencies {
-    def accompanistVersion = "0.18.0"
-    //viewPager
-    implementation "com.google.accompanist:accompanist-pager:0.20.2"
-    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanistVersion"
-
-    implementation project(":common-model")
-    implementation project(":common-ui")
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
