@@ -39,6 +39,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import com.cesc.commonmodel.Article
+import com.cn.architecture.collectSideEffect
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
@@ -51,23 +52,24 @@ internal fun TrendScreen(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.event.collectLatest {
-            when (it) {
-                is TrendEvent.ShowToast -> trendShowToast(context, it.msg)
+    viewModel.collectSideEffect {
+        when (it) {
+            is TrendUiEffect.ShowToast -> {
+                trendShowToast(context, it.msg)
             }
         }
+
     }
 
     //生命周期state
     val lifecycleEventState by LocalLifecycleOwner.current.lifecycle.observeAsState()
 
-    if (lifecycleEventState == Lifecycle.Event.ON_RESUME){
+    if (lifecycleEventState == Lifecycle.Event.ON_RESUME) {
         Log.e("Trend", "Resume")
     }
 
     DisposableEffect(key1 = "Init") {
-        viewModel.sendIntent(TrendIntent.Init)
+        viewModel.sendEvent(TrendUiEvent.Init)
         onDispose { }
     }
 
